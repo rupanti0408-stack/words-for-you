@@ -1,0 +1,1548 @@
+/* ===========================
+   CSS Variables & Theme
+=========================== */
+:root {
+  /* ── Light theme: dusty sage-rose ── */
+  --bg: #eef0eb;
+  --bg-secondary: #e4e8e0;
+  --surface: rgba(248, 250, 245, 0.93);
+  --surface-2: #eff2ea;
+  --border: #cdd5c5;
+  --border-glow: rgba(130, 160, 110, 0.28);
+  --text: #252e20;
+  --text-secondary: #546050;
+  --text-muted: #8a9985;
+  --accent: #7a9e6e;
+  --accent-2: #5e8050;
+  --accent-soft: #d6e8cc;
+  --accent-hover: #5e8050;
+  --gold: #b89e5a;
+  --gold-soft: rgba(184,158,90,0.15);
+  --shadow: rgba(40, 60, 30, 0.10);
+  --shadow-deep: rgba(40, 60, 30, 0.20);
+  --shadow-xl: rgba(40, 60, 30, 0.32);
+  --slider-track: #cdd8c5;
+  --slider-thumb: #7a9e6e;
+  --envelope-color: #dde8c8;
+  --envelope-mid: #c8d8a8;
+  --envelope-dark: #aec090;
+  --paper-color: #f9fbf5;
+  --paper-lines: #e2eada;
+  --particle-color: rgba(120,158,100,0.15);
+  --transition: 0.3s ease;
+  --radius-card: 22px;
+}
+
+[data-theme="dark"] {
+  /* ── Dark theme: deep forest sage ── */
+  --bg: #0e1210;
+  --bg-secondary: #141a12;
+  --surface: rgba(18, 26, 18, 0.96);
+  --surface-2: #1a2418;
+  --border: #2a3828;
+  --border-glow: rgba(100, 150, 80, 0.22);
+  --text: #daebd2;
+  --text-secondary: #96b88a;
+  --text-muted: #5a7852;
+  --accent: #88bb78;
+  --accent-2: #a8d098;
+  --accent-soft: #1e3018;
+  --accent-hover: #a8d098;
+  --gold: #a8b86a;
+  --gold-soft: rgba(168,184,106,0.12);
+  --shadow: rgba(0, 0, 0, 0.38);
+  --shadow-deep: rgba(0, 0, 0, 0.58);
+  --shadow-xl: rgba(0, 0, 0, 0.72);
+  --slider-track: #2a3828;
+  --slider-thumb: #88bb78;
+  --envelope-color: #1e3020;
+  --envelope-mid: #162418;
+  --envelope-dark: #0e1a10;
+  --paper-color: #141e12;
+  --paper-lines: #1c2a1a;
+  --particle-color: rgba(100,150,80,0.12);
+  --transition: 0.3s ease;
+}
+
+/* ===========================
+   Base & Texture
+=========================== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Lato', sans-serif;
+  font-weight: 300;
+  background-color: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  transition: background-color 0.5s ease, color var(--transition);
+  overflow-x: hidden;
+  /* Paper grain texture via SVG filter */
+  position: relative;
+}
+
+/* Grain overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.032;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+}
+[data-theme="dark"] body::before { opacity: 0.055; }
+
+/* Ensure content sits above grain */
+header, main, section, footer, .theme-toggle { position: relative; z-index: 1; }
+
+/* ===========================
+   Floating Particles Canvas
+=========================== */
+#particleCanvas {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 1;
+}
+
+/* ===========================
+   Theme Toggle
+=========================== */
+.theme-toggle {
+  position: fixed;
+  top: 1.2rem;
+  right: 1.5rem;
+  z-index: 1000;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 50px;
+  padding: 0.5rem 1.1rem;
+  cursor: pointer;
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+  box-shadow: 0 2px 16px var(--shadow), inset 0 1px 0 rgba(255,255,255,0.06);
+  transition: all var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  letter-spacing: 0.02em;
+}
+.theme-toggle:hover {
+  box-shadow: 0 4px 24px var(--shadow-deep);
+  transform: translateY(-2px);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.theme-icon { font-size: 1rem; }
+
+/* ===========================
+   Header
+=========================== */
+.site-header {
+  text-align: center;
+  padding: 5rem 1.5rem 3.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Soft radial glow behind title */
+.site-header::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px;
+  height: 300px;
+  background: radial-gradient(ellipse, var(--accent-soft) 0%, transparent 70%);
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.header-ornament {
+  display: block;
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  opacity: 0.45;
+  animation: floatOrnament 4s ease-in-out infinite;
+  color: var(--gold);
+  filter: drop-shadow(0 2px 8px var(--accent-soft));
+}
+
+@keyframes floatOrnament {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50%       { transform: translateY(-6px) rotate(2deg); }
+}
+
+.site-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.4rem, 5.5vw, 4rem);
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: 0.03em;
+  margin-bottom: 0.7rem;
+  line-height: 1.1;
+  animation: fadeUp 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+  text-shadow: 0 2px 20px var(--accent-soft);
+}
+
+.site-tagline {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: clamp(0.95rem, 2.2vw, 1.18rem);
+  color: var(--text-secondary);
+  letter-spacing: 0.015em;
+  animation: fadeUp 0.9s 0.15s cubic-bezier(0.22, 1, 0.36, 1) both;
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+/* Decorative divider */
+.header-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  margin-top: 2rem;
+  opacity: 0.35;
+  animation: fadeUp 0.9s 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.header-divider::before,
+.header-divider::after {
+  content: '';
+  width: 80px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent));
+}
+.header-divider::after {
+  background: linear-gradient(90deg, var(--accent), transparent);
+}
+.header-divider span { color: var(--gold); font-size: 0.9rem; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ===========================
+   Main Layout
+=========================== */
+.main-layout {
+  display: grid;
+  grid-template-columns: 1fr 350px;
+  gap: 2rem;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 3rem;
+  animation: fadeUp 0.7s 0.2s cubic-bezier(0.22,1,0.36,1) both;
+}
+
+@media (max-width: 880px) {
+  .main-layout { grid-template-columns: 1fr; }
+}
+
+/* ===========================
+   Panel Cards — glassmorphism + hover zoom & glow
+=========================== */
+.panel-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  padding: 2rem 2.2rem;
+  box-shadow:
+    0 4px 28px var(--shadow),
+    0 1px 0 rgba(255,255,255,0.08) inset,
+    0 0 0 1px var(--border-glow) inset;
+  transition:
+    transform 0.38s cubic-bezier(0.34, 1.4, 0.64, 1),
+    box-shadow 0.38s ease,
+    border-color 0.38s ease,
+    background 0.38s ease;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  position: relative;
+  will-change: transform;
+}
+
+/* Glow pseudo-element that brightens on hover */
+.panel-card::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: calc(var(--radius-card) + 1px);
+  background: radial-gradient(ellipse at 50% 0%, var(--accent-soft), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.panel-card > * { position: relative; z-index: 1; }
+
+.panel-card:hover {
+  transform: scale(1.025) translateY(-4px);
+  border-color: var(--accent);
+  box-shadow:
+    0 16px 55px var(--shadow-deep),
+    0 0 0 1.5px var(--accent),
+    0 0 40px var(--border-glow),
+    0 1px 0 rgba(255,255,255,0.1) inset;
+}
+
+.panel-card:hover::after {
+  opacity: 1;
+}
+
+.panel-heading {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 0.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.panel-heading-icon { font-size: 1.1rem; opacity: 0.7; }
+
+.panel-sub {
+  font-size: 0.84rem;
+  color: var(--text-muted);
+  margin-bottom: 1.8rem;
+  line-height: 1.6;
+}
+
+/* ===========================
+   Form Elements
+=========================== */
+.form-group { margin-bottom: 1.5rem; }
+
+.form-group label {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 400;
+}
+
+input[type="text"],
+textarea,
+select {
+  width: 100%;
+  padding: 0.8rem 1.1rem;
+  background: var(--surface-2);
+  border: 1.5px solid var(--border);
+  border-radius: 13px;
+  font-family: 'Lato', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 300;
+  color: var(--text);
+  transition: all var(--transition);
+  outline: none;
+  appearance: none;
+}
+
+input[type="text"]:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft), 0 2px 12px var(--shadow);
+  background: var(--surface);
+}
+
+input[type="text"]::placeholder,
+textarea::placeholder { color: var(--text-muted); opacity: 0.7; }
+
+textarea {
+  resize: vertical;
+  min-height: 105px;
+  line-height: 1.65;
+}
+
+select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23a89f96' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  cursor: pointer;
+}
+
+/* ===========================
+   Emotion Buttons — per-emotion colors
+=========================== */
+.emotion-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.emotion-btn {
+  background: var(--surface-2);
+  border: 1.5px solid var(--border);
+  border-radius: 50px;
+  padding: 0.48rem 1rem;
+  font-size: 0.84rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.22s ease;
+  font-family: 'Lato', sans-serif;
+  white-space: nowrap;
+  position: relative;
+  overflow: hidden;
+}
+
+.emotion-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: currentColor;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  border-radius: inherit;
+}
+
+.emotion-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px var(--shadow);
+}
+
+/* Per-emotion active colors */
+.emotion-btn[data-emotion="love"].active      { background:#e8748a; border-color:#e8748a; color:#fff; box-shadow:0 4px 16px rgba(232,116,138,0.4); }
+.emotion-btn[data-emotion="grief"].active     { background:#7090b8; border-color:#7090b8; color:#fff; box-shadow:0 4px 16px rgba(112,144,184,0.4); }
+.emotion-btn[data-emotion="apology"].active   { background:#9b72b0; border-color:#9b72b0; color:#fff; box-shadow:0 4px 16px rgba(155,114,176,0.4); }
+.emotion-btn[data-emotion="gratitude"].active { background:#c09040; border-color:#c09040; color:#fff; box-shadow:0 4px 16px rgba(192,144,64,0.4); }
+.emotion-btn[data-emotion="longing"].active   { background:#5a9aaa; border-color:#5a9aaa; color:#fff; box-shadow:0 4px 16px rgba(90,154,170,0.4); }
+.emotion-btn[data-emotion="hope"].active      { background:#6aaa70; border-color:#6aaa70; color:#fff; box-shadow:0 4px 16px rgba(106,170,112,0.4); }
+.emotion-btn[data-emotion="anger"].active     { background:#c85840; border-color:#c85840; color:#fff; box-shadow:0 4px 16px rgba(200,88,64,0.4); }
+.emotion-btn[data-emotion="anxiety"].active   { background:#7878a8; border-color:#7878a8; color:#fff; box-shadow:0 4px 16px rgba(120,120,168,0.4); }
+.emotion-btn[data-emotion="pride"].active     { background:#b89030; border-color:#b89030; color:#fff; box-shadow:0 4px 16px rgba(184,144,48,0.4); }
+.emotion-btn[data-emotion="forgiveness"].active { background:#68a888; border-color:#68a888; color:#fff; box-shadow:0 4px 16px rgba(104,168,136,0.4); }
+
+/* Hover tints */
+.emotion-btn[data-emotion="love"]:hover      { border-color:#e8748a; color:#e8748a; background:rgba(232,116,138,0.1); }
+.emotion-btn[data-emotion="grief"]:hover     { border-color:#7090b8; color:#7090b8; background:rgba(112,144,184,0.1); }
+.emotion-btn[data-emotion="apology"]:hover   { border-color:#9b72b0; color:#9b72b0; background:rgba(155,114,176,0.1); }
+.emotion-btn[data-emotion="gratitude"]:hover { border-color:#c09040; color:#c09040; background:rgba(192,144,64,0.1); }
+.emotion-btn[data-emotion="longing"]:hover   { border-color:#5a9aaa; color:#5a9aaa; background:rgba(90,154,170,0.1); }
+.emotion-btn[data-emotion="hope"]:hover      { border-color:#6aaa70; color:#6aaa70; background:rgba(106,170,112,0.1); }
+.emotion-btn[data-emotion="anger"]:hover     { border-color:#c85840; color:#c85840; background:rgba(200,88,64,0.1); }
+.emotion-btn[data-emotion="anxiety"]:hover   { border-color:#7878a8; color:#7878a8; background:rgba(120,120,168,0.1); }
+.emotion-btn[data-emotion="pride"]:hover     { border-color:#b89030; color:#b89030; background:rgba(184,144,48,0.1); }
+.emotion-btn[data-emotion="forgiveness"]:hover { border-color:#68a888; color:#68a888; background:rgba(104,168,136,0.1); }
+
+/* ===========================
+   Generate Button — shimmer
+=========================== */
+.generate-btn {
+  width: 100%;
+  padding: 1.05rem;
+  margin-top: 0.5rem;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+  color: #fff;
+  border: none;
+  border-radius: 15px;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.05rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  transition: all var(--transition);
+  box-shadow: 0 4px 22px rgba(100,140,80,0.35), 0 1px 0 rgba(255,255,255,0.2) inset;
+  letter-spacing: 0.025em;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Shimmer sweep */
+.generate-btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.28) 50%, transparent 70%);
+  transition: left 0.55s ease;
+  pointer-events: none;
+}
+
+.generate-btn:hover::after { left: 140%; }
+
+.generate-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(100,140,80,0.45), 0 1px 0 rgba(255,255,255,0.2) inset;
+}
+
+.generate-btn:active { transform: translateY(-1px); }
+.generate-btn .btn-icon { font-size: 1.2rem; }
+
+/* Loading dots */
+.generate-btn.loading .btn-text::after {
+  content: '';
+  display: inline-block;
+  animation: ellipsis 1.2s infinite;
+}
+@keyframes ellipsis {
+  0%   { content: ''; }
+  33%  { content: '.'; }
+  66%  { content: '..'; }
+  100% { content: '...'; }
+}
+
+/* ===========================
+   Emotion Panel — Sliders
+=========================== */
+.emotion-panel {
+  /* wrapper gets sticky so the card itself can use transform freely */
+  align-self: start;
+  position: sticky;
+  top: 1.5rem;
+}
+
+.emotion-panel .panel-card {
+  /* no sticky here — parent handles it */
+}
+
+.slider-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1.05rem;
+  margin-bottom: 1.8rem;
+}
+
+.slider-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.38rem;
+  font-size: 0.86rem;
+  color: var(--text-secondary);
+}
+
+.slider-val {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.88rem;
+  color: var(--accent);
+  min-width: 2.2rem;
+  text-align: right;
+  font-weight: 600;
+}
+
+/* Slider with filled track */
+input[type="range"].slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 5px;
+  border-radius: 5px;
+  outline: none;
+  padding: 0;
+  border: none;
+  box-shadow: none;
+  cursor: pointer;
+  /* filled track via background set in JS */
+  background: linear-gradient(to right, var(--accent) 0%, var(--accent) var(--val, 50%), var(--slider-track) var(--val, 50%), var(--slider-track) 100%);
+}
+
+input[type="range"].slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 2.5px solid var(--accent);
+  cursor: pointer;
+  box-shadow: 0 2px 10px var(--shadow-deep);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+input[type="range"].slider::-webkit-slider-thumb:hover {
+  transform: scale(1.25);
+  box-shadow: 0 0 0 5px var(--accent-soft);
+}
+
+input[type="range"].slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 2.5px solid var(--accent);
+  cursor: pointer;
+  box-shadow: 0 2px 10px var(--shadow-deep);
+}
+
+/* ===========================
+   Emotion Aura — pulsing orb
+=========================== */
+.emotion-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1.4rem;
+  gap: 0.7rem;
+}
+
+.aura-ring {
+  position: relative;
+  width: 110px;
+  height: 110px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.aura-ring::before {
+  content: '';
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  border: 1.5px solid var(--accent);
+  opacity: 0.2;
+  animation: auraRingPulse 3s ease-in-out infinite;
+}
+
+.aura-ring::after {
+  content: '';
+  position: absolute;
+  inset: -16px;
+  border-radius: 50%;
+  border: 1px solid var(--accent);
+  opacity: 0.1;
+  animation: auraRingPulse 3s 0.5s ease-in-out infinite;
+}
+
+@keyframes auraRingPulse {
+  0%, 100% { transform: scale(1); opacity: 0.15; }
+  50%       { transform: scale(1.06); opacity: 0.3; }
+}
+
+.emotion-aura {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 38% 38%, #e8d0a8, #c8a070);
+  box-shadow: 0 0 35px rgba(200, 140, 80, 0.35), 0 0 12px rgba(200,140,80,0.2);
+  transition: all 0.6s ease;
+  animation: auraBreath 4s ease-in-out infinite;
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes auraBreath {
+  0%, 100% { transform: scale(1); }
+  50%       { transform: scale(1.04); }
+}
+
+.aura-label {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  text-align: center;
+  min-height: 1.4em;
+  transition: all 0.4s ease;
+}
+
+.reset-btn {
+  width: 100%;
+  padding: 0.65rem;
+  background: transparent;
+  border: 1.5px solid var(--border);
+  border-radius: 11px;
+  font-family: 'Lato', sans-serif;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--transition);
+  letter-spacing: 0.02em;
+}
+
+.reset-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+
+/* ===========================
+   Letter Section
+=========================== */
+.letter-section {
+  display: none;
+  padding: 2rem 1.5rem 5rem;
+}
+
+.letter-section.visible { display: block; }
+
+.letter-bg {
+  border-radius: 28px;
+  padding: 4rem 2rem 3.5rem;
+  max-width: 880px;
+  margin: 0 auto;
+  transition: background 1.2s ease;
+  position: relative;
+}
+
+/* Section title above envelope */
+.letter-section-title {
+  text-align: center;
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 1rem;
+  color: var(--text-muted);
+  margin-bottom: 2.5rem;
+  letter-spacing: 0.04em;
+  opacity: 0;
+  transition: opacity 0.5s ease 0.3s;
+}
+.letter-section.visible .letter-section-title { opacity: 1; }
+
+/* ===========================
+   Envelope — richer 3D look
+=========================== */
+.envelope-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  perspective: 900px;
+}
+
+.envelope {
+  width: 360px;
+  height: 220px;
+  position: relative;
+  z-index: 10;
+  filter: drop-shadow(0 12px 40px var(--shadow-deep));
+}
+
+/* Envelope body */
+.envelope-body {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(160deg, var(--envelope-color) 0%, var(--envelope-mid) 60%, var(--envelope-dark) 100%);
+  border-radius: 5px 5px 12px 12px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Bottom flap triangle */
+.envelope-body::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  border-left: 180px solid transparent;
+  border-right: 180px solid transparent;
+  border-bottom: 100px solid var(--envelope-dark);
+  opacity: 0.7;
+}
+
+/* Side triangles for realistic fold lines */
+.envelope-body::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(135deg, rgba(255,255,255,0.08) 0%, transparent 50%),
+    linear-gradient(225deg, rgba(0,0,0,0.06) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+/* Top flap */
+.envelope-flap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 20;
+  height: 0;
+  border-left: 180px solid transparent;
+  border-right: 180px solid transparent;
+  border-top: 115px solid var(--envelope-dark);
+  transform-origin: top center;
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
+}
+
+.envelope-flap.open { transform: rotateX(185deg); }
+
+/* Wax seal */
+.envelope-seal {
+  font-size: 2rem;
+  z-index: 15;
+  position: relative;
+  color: var(--gold);
+  text-shadow: 0 2px 8px rgba(180,130,50,0.5);
+  transition: all 0.4s ease;
+  animation: sealPulse 2.5s ease-in-out infinite;
+}
+
+@keyframes sealPulse {
+  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 4px rgba(180,130,50,0.3)); }
+  50%       { transform: scale(1.08); filter: drop-shadow(0 0 10px rgba(180,130,50,0.6)); }
+}
+
+.envelope-flap.open ~ .envelope-body .envelope-seal {
+  opacity: 0;
+  transform: scale(0.6);
+}
+
+/* ===========================
+   Letter Paper — A4-style
+=========================== */
+.letter-paper {
+  width: min(780px, 92vw);
+  background: var(--paper-color);
+  border-radius: 3px 3px 8px 8px;
+  padding: 3rem 3.2rem 2.5rem;
+  box-shadow:
+    0 12px 60px var(--shadow-xl),
+    -2px 0 8px rgba(0,0,0,0.04),
+    2px 0 8px rgba(0,0,0,0.04),
+    0 0 0 1px rgba(180,150,100,0.1);
+  position: relative;
+  z-index: 5;
+  transform: translateY(0) scaleY(0);
+  transform-origin: top center;
+  opacity: 0;
+  transition: transform 1s cubic-bezier(0.34, 1.4, 0.64, 1), opacity 0.6s ease;
+  margin-top: -12px;
+
+  /* Lined paper */
+  background-image: repeating-linear-gradient(
+    transparent,
+    transparent 30px,
+    var(--paper-lines) 30px,
+    var(--paper-lines) 31px
+  );
+  background-position: 0 3.2rem;
+}
+
+.letter-paper.revealed {
+  transform: translateY(0) scaleY(1);
+  opacity: 1;
+}
+
+/* Red margin line */
+.letter-paper::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 4rem;
+  width: 1px;
+  height: 100%;
+  background: rgba(220,100,90,0.12);
+}
+
+/* Page-curl shadow at bottom right */
+.letter-paper::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(225deg, rgba(0,0,0,0.07) 0%, transparent 60%);
+  border-radius: 0 0 8px 0;
+  pointer-events: none;
+}
+
+/* Watermark ornament */
+.letter-watermark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 5rem;
+  opacity: 0.025;
+  pointer-events: none;
+  color: var(--accent);
+  user-select: none;
+  font-family: 'Playfair Display', serif;
+}
+
+/* ===========================
+   Letter Content Typography
+=========================== */
+.letter-content {
+  font-family: 'Dancing Script', cursive;
+  line-height: 2.05;
+  position: relative;
+  z-index: 1;
+}
+
+.letter-date {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  text-align: right;
+  margin-bottom: 1.4rem;
+  font-family: 'Lato', sans-serif;
+  font-style: italic;
+  letter-spacing: 0.04em;
+}
+
+.letter-greeting {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 1rem;
+}
+
+.letter-body {
+  font-size: 1.05rem;
+  color: var(--text);
+  white-space: pre-wrap;
+  line-height: 2.05;
+}
+
+.letter-closing {
+  margin-top: 1.5rem;
+  font-size: 1rem;
+  color: var(--text-secondary);
+}
+
+.letter-signature {
+  font-family: 'Dancing Script', cursive;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-top: 0.3rem;
+  display: inline-block;
+  position: relative;
+}
+
+/* Underline on signature */
+.letter-signature::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, var(--accent), transparent);
+  opacity: 0.5;
+}
+
+/* ===========================
+   Letter Actions
+=========================== */
+.letter-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 3rem;
+  opacity: 0;
+  transform: translateY(14px);
+  transition: all 0.6s ease 2s;
+}
+
+.letter-actions.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.action-btn {
+  padding: 0.75rem 1.8rem;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 50px;
+  font-family: 'Lato', sans-serif;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  position: relative;
+  overflow: hidden;
+}
+
+.action-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--accent);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  border-radius: inherit;
+}
+
+.action-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-soft);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px var(--shadow-deep);
+}
+
+/* ===========================
+   Emotion Background Colors
+   — richer, larger gradients
+=========================== */
+.bg-love     { background: radial-gradient(ellipse at 30% 40%, rgba(255,160,185,0.3), rgba(255,220,230,0.18) 60%, transparent); }
+.bg-grief    { background: radial-gradient(ellipse at 30% 40%, rgba(140,170,210,0.3), rgba(190,210,235,0.18) 60%, transparent); }
+.bg-apology  { background: radial-gradient(ellipse at 30% 40%, rgba(190,155,215,0.28), rgba(220,200,235,0.18) 60%, transparent); }
+.bg-gratitude{ background: radial-gradient(ellipse at 30% 40%, rgba(220,180,90,0.28), rgba(245,225,160,0.18) 60%, transparent); }
+.bg-longing  { background: radial-gradient(ellipse at 30% 40%, rgba(100,185,210,0.28), rgba(175,225,240,0.18) 60%, transparent); }
+.bg-hope     { background: radial-gradient(ellipse at 30% 40%, rgba(130,200,140,0.28), rgba(195,235,195,0.18) 60%, transparent); }
+.bg-anger    { background: radial-gradient(ellipse at 30% 40%, rgba(220,110,90,0.25), rgba(250,185,165,0.18) 60%, transparent); }
+.bg-anxiety  { background: radial-gradient(ellipse at 30% 40%, rgba(160,155,210,0.28), rgba(205,200,230,0.18) 60%, transparent); }
+.bg-pride    { background: radial-gradient(ellipse at 30% 40%, rgba(220,185,60,0.25), rgba(245,225,140,0.18) 60%, transparent); }
+.bg-forgiveness { background: radial-gradient(ellipse at 30% 40%, rgba(100,190,155,0.28), rgba(180,235,210,0.18) 60%, transparent); }
+
+[data-theme="dark"] .bg-love     { background: radial-gradient(ellipse at 30% 40%, rgba(120,28,55,0.50), transparent 65%); }
+[data-theme="dark"] .bg-grief    { background: radial-gradient(ellipse at 30% 40%, rgba(20,38,75,0.55), transparent 65%); }
+[data-theme="dark"] .bg-apology  { background: radial-gradient(ellipse at 30% 40%, rgba(58,22,80,0.55), transparent 65%); }
+[data-theme="dark"] .bg-gratitude{ background: radial-gradient(ellipse at 30% 40%, rgba(55,50,10,0.55), transparent 65%); }
+[data-theme="dark"] .bg-longing  { background: radial-gradient(ellipse at 30% 40%, rgba(8,48,65,0.55), transparent 65%); }
+[data-theme="dark"] .bg-hope     { background: radial-gradient(ellipse at 30% 40%, rgba(14,55,22,0.60), transparent 65%); }
+[data-theme="dark"] .bg-anger    { background: radial-gradient(ellipse at 30% 40%, rgba(95,18,10,0.55), transparent 65%); }
+[data-theme="dark"] .bg-anxiety  { background: radial-gradient(ellipse at 30% 40%, rgba(25,25,65,0.55), transparent 65%); }
+[data-theme="dark"] .bg-pride    { background: radial-gradient(ellipse at 30% 40%, rgba(75,58,0,0.55), transparent 65%); }
+[data-theme="dark"] .bg-forgiveness { background: radial-gradient(ellipse at 30% 40%, rgba(8,55,32,0.60), transparent 65%); }
+
+/* ===========================
+   Footer
+=========================== */
+.site-footer {
+  text-align: center;
+  padding: 2rem 1rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  border-top: 1px solid var(--border);
+  letter-spacing: 0.07em;
+  position: relative;
+  z-index: 1;
+}
+
+.footer-heart { color: var(--accent); font-style: normal; }
+
+/* ===========================
+   Scrollbar
+=========================== */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+/* ===========================
+   Responsive
+=========================== */
+@media (max-width: 600px) {
+  .main-layout { padding: 1.2rem; gap: 1.4rem; }
+  .panel-card  { padding: 1.5rem 1.3rem; }
+  .letter-paper { padding: 2rem 1.5rem; }
+  .envelope { width: min(340px, 90vw); height: 200px; }
+  .envelope-body::after { border-left-width: calc(min(340px, 90vw) / 2); border-right-width: calc(min(340px, 90vw) / 2); }
+  .envelope-flap { border-left-width: calc(min(340px, 90vw) / 2); border-right-width: calc(min(340px, 90vw) / 2); }
+  .letter-actions { flex-direction: column; align-items: center; }
+  .site-header { padding: 3.5rem 1.2rem 2.5rem; }
+}
+
+/* ===========================
+   Theme label
+=========================== */
+.theme-label {
+  font-size: 0.8rem;
+  font-family: 'Lato', sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+}
+
+/* ==============================================
+   Per-Panel Font Overrides
+   ─────────────────────────────────────────────
+   • Header           → Playfair Display (kept, perfect for titles)
+   • Craft Your Letter panel → Cormorant Garamond (old-world literary serif)
+   • Emotion Depth panel     → Josefin Sans (geometric, airy sans)
+   • Letter paper     → Dancing Script (kept, handwritten feel)
+   • Footer           → Josefin Sans (light, spaced)
+============================================== */
+
+/* ── CRAFT YOUR LETTER PANEL ───────────────── */
+.input-panel .panel-card {
+  font-family: 'Cormorant Garamond', serif;
+}
+
+/* Panel heading */
+.input-panel .panel-heading {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.6rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+/* Labels */
+.input-panel .form-group label {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+  text-transform: none;
+  font-weight: 400;
+  color: var(--text-secondary);
+}
+
+/* Inputs, textarea, select */
+.input-panel input[type="text"],
+.input-panel textarea,
+.input-panel select {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.05rem;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
+
+/* Placeholder */
+.input-panel input[type="text"]::placeholder,
+.input-panel textarea::placeholder {
+  font-style: italic;
+  font-family: 'Cormorant Garamond', serif;
+  opacity: 0.55;
+}
+
+/* Emotion buttons */
+.input-panel .emotion-btn {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.98rem;
+  letter-spacing: 0.02em;
+  font-weight: 400;
+}
+
+/* Generate button */
+.input-panel .generate-btn {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+/* ── EMOTION DEPTH PANEL ────────────────────── */
+.emotion-panel .panel-card {
+  font-family: 'Josefin Sans', sans-serif;
+}
+
+.emotion-panel .panel-heading {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.emotion-panel .panel-sub {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 300;
+  letter-spacing: 0.06em;
+  line-height: 1.7;
+}
+
+/* Slider labels */
+.emotion-panel .slider-label span:first-child {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* Slider value numbers */
+.emotion-panel .slider-val {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+/* Aura label */
+.emotion-panel .aura-label {
+  font-family: 'Josefin Sans', sans-serif;
+  font-style: normal;
+  font-size: 0.82rem;
+  font-weight: 300;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* Reset button */
+.emotion-panel .reset-btn {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* ── LETTER SECTION ─────────────────────────── */
+
+/* "Your letter is ready" subtitle */
+.letter-section-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 1.1rem;
+  letter-spacing: 0.06em;
+  font-weight: 400;
+}
+
+/* Letter date — Josefin Sans for a crisp datestamp feel */
+.letter-date {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 300;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* Greeting — Cormorant Garamond, bold & warm */
+.letter-greeting {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.35rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+/* Body text — Dancing Script (already set globally, reinforced) */
+.letter-body {
+  font-family: 'Dancing Script', cursive;
+  font-size: 1.08rem;
+  line-height: 2.05;
+}
+
+/* Closing */
+.letter-closing {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 1rem;
+  letter-spacing: 0.02em;
+}
+
+/* Signature keeps Dancing Script */
+.letter-signature {
+  font-family: 'Dancing Script', cursive;
+  font-size: 1.65rem;
+}
+
+/* Action buttons under letter */
+.action-btn {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* ── FOOTER ─────────────────────────────────── */
+.site-footer {
+  font-family: 'Josefin Sans', sans-serif;
+  font-weight: 300;
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* ==============================================
+   Download Loading Overlay
+============================================== */
+.dl-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  background: rgba(10, 16, 10, 0.82);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+.dl-overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.dl-overlay-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+/* ── Mini animated envelope ── */
+.dl-envelope-anim {
+  position: relative;
+  width: 120px;
+  height: 80px;
+}
+
+.dl-env-body {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(160deg, var(--envelope-color), var(--envelope-dark));
+  border-radius: 3px 3px 8px 8px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  overflow: visible;
+}
+
+/* Flap triangle */
+.dl-env-body::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 0; height: 0;
+  border-left: 60px solid transparent;
+  border-right: 60px solid transparent;
+  border-top: 40px solid var(--envelope-dark);
+  transform-origin: top center;
+  animation: dlFlapOpen 2s ease-in-out infinite;
+}
+
+/* Bottom triangle */
+.dl-env-body::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 0; height: 0;
+  border-left: 60px solid transparent;
+  border-right: 60px solid transparent;
+  border-bottom: 36px solid var(--envelope-mid);
+  opacity: 0.6;
+}
+
+@keyframes dlFlapOpen {
+  0%, 30%  { transform: rotateX(0deg); }
+  50%, 80% { transform: rotateX(175deg); }
+  100%     { transform: rotateX(0deg); }
+}
+
+/* Letter sliding out */
+.dl-env-letter {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  height: 70px;
+  background: var(--paper-color);
+  border-radius: 2px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+  animation: dlLetterSlide 2s ease-in-out infinite;
+  transform-origin: bottom center;
+  /* lined paper */
+  background-image: repeating-linear-gradient(
+    transparent, transparent 9px,
+    var(--paper-lines) 9px, var(--paper-lines) 10px
+  );
+  background-position: 0 10px;
+}
+
+/* Tiny text lines on the mini letter */
+.dl-env-letter::before {
+  content: '';
+  position: absolute;
+  top: 12px; left: 8px; right: 8px;
+  height: 1px;
+  background: var(--accent);
+  opacity: 0.3;
+  box-shadow:
+    0 10px 0 0 rgba(130,187,120,0.25),
+    0 20px 0 0 rgba(130,187,120,0.2),
+    0 30px 0 0 rgba(130,187,120,0.15);
+}
+
+@keyframes dlLetterSlide {
+  0%        { transform: translateY(20px); opacity: 0; }
+  25%, 70%  { transform: translateY(-28px); opacity: 1; }
+  90%, 100% { transform: translateY(20px); opacity: 0; }
+}
+
+/* ── Phrase text ── */
+.dl-phrase {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: clamp(1.1rem, 3vw, 1.4rem);
+  color: var(--text);
+  text-align: center;
+  letter-spacing: 0.04em;
+  max-width: 340px;
+  line-height: 1.6;
+  opacity: 0;
+  animation: dlPhraseFade 0.6s 0.3s ease forwards;
+}
+
+@keyframes dlPhraseFade {
+  to { opacity: 1; }
+}
+
+/* ── Bouncing dots ── */
+.dl-dots {
+  display: flex;
+  gap: 8px;
+}
+
+.dl-dots span {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  opacity: 0.7;
+  animation: dlDotBounce 1.2s ease-in-out infinite;
+}
+.dl-dots span:nth-child(2) { animation-delay: 0.2s; }
+.dl-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes dlDotBounce {
+  0%, 100% { transform: translateY(0); opacity: 0.4; }
+  50%       { transform: translateY(-8px); opacity: 1; }
+}
+
+/* ==============================================
+   Multi-emotion selection — badges & hint
+============================================== */
+
+/* "pick up to 3" hint beside label */
+.emotion-hint {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 300;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-left: 0.4rem;
+  font-style: normal;
+  vertical-align: middle;
+  opacity: 0.8;
+}
+
+/* Number badge on selected emotion buttons */
+.emotion-btn[data-order]::after {
+  content: attr(data-order);
+  position: absolute;
+  top: -7px;
+  right: -7px;
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  background: var(--text);
+  color: var(--bg);
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.62rem;
+  font-weight: 600;
+  font-style: normal;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  box-shadow: 0 1px 6px var(--shadow-deep);
+  pointer-events: none;
+  z-index: 2;
+  /* pop in with a little spring */
+  animation: badgePop 0.25s cubic-bezier(0.34, 1.6, 0.64, 1) both;
+}
+
+@keyframes badgePop {
+  from { transform: scale(0); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+
+/* Make sure the button stays positioned for the badge */
+.emotion-btn {
+  position: relative;
+}
+
+/* Second and third selections get a slightly softer active ring
+   to visually distinguish them from the first (dominant) */
+.emotion-btn[data-order="2"].active {
+  opacity: 0.88;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+}
+
+.emotion-btn[data-order="3"].active {
+  opacity: 0.76;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+}
+
+/* Emotion selection counter strip below the grid */
+.emotion-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding-bottom: 0.2rem;
+}
+
+/* Shown when at least one emotion is active — injected by JS */
+.emotion-count-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.65rem;
+  padding: 0.38rem 0.75rem;
+  background: var(--accent-soft);
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  transition: all 0.3s ease;
+}
+
+.emotion-count-bar.hidden {
+  opacity: 0;
+  pointer-events: none;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.emotion-count-pips {
+  display: flex;
+  gap: 5px;
+}
+
+.emotion-pip {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  opacity: 0.35;
+  transition: all 0.25s ease;
+}
+
+.emotion-pip.filled {
+  opacity: 1;
+  transform: scale(1.2);
+}
+
+.emotion-count-text {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.emotion-count-names {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 0.9rem;
+  color: var(--accent);
+  margin-left: auto;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 180px;
+}

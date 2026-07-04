@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Words for You</title>
+  <link rel="stylesheet" href="fonts/fonts.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Particle Canvas -->
+  <canvas id="particleCanvas" aria-hidden="true"></canvas>
+
+  <!-- Theme Toggle -->
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+    <span class="theme-icon">🌙</span>
+    <span class="theme-label" id="themeLabel">Dark</span>
+  </button>
+
+  <!-- Header -->
+  <header class="site-header">
+    <span class="header-ornament" aria-hidden="true">✦</span>
+    <h1 class="site-title">Words for You</h1>
+    <p class="site-tagline">When you know what you feel, but don't know how to say it</p>
+    <div class="header-divider" aria-hidden="true"><span>✦</span></div>
+  </header>
+
+  <!-- Main Layout -->
+  <main class="main-layout">
+
+    <!-- Left: Input Panel -->
+    <section class="input-panel">
+      <div class="panel-card">
+        <h2 class="panel-heading"><span class="panel-heading-icon">✍️</span> Craft Your Letter</h2>
+
+        <div class="form-group">
+          <label for="recipient">To whom is this letter?</label>
+          <input type="text" id="recipient" placeholder="e.g. Mom, my best friend, Sarah..." />
+        </div>
+
+        <div class="form-group">
+          <label for="situation">What's the situation?</label>
+          <textarea id="situation" rows="4" placeholder="Tell me a little about what happened or what you're feeling..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="emotion">Emotions <span class="emotion-hint">(pick up to 3)</span></label>
+          <div class="emotion-grid" id="emotionGrid">
+            <button class="emotion-btn" data-emotion="love">💗 Love</button>
+            <button class="emotion-btn" data-emotion="grief">🌧️ Grief</button>
+            <button class="emotion-btn" data-emotion="apology">🙏 Apology</button>
+            <button class="emotion-btn" data-emotion="gratitude">✨ Gratitude</button>
+            <button class="emotion-btn" data-emotion="longing">🌙 Longing</button>
+            <button class="emotion-btn" data-emotion="hope">🌱 Hope</button>
+            <button class="emotion-btn" data-emotion="anger">🔥 Anger</button>
+            <button class="emotion-btn" data-emotion="anxiety">🌀 Anxiety</button>
+            <button class="emotion-btn" data-emotion="pride">🌟 Pride</button>
+            <button class="emotion-btn" data-emotion="forgiveness">🕊️ Forgiveness</button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="letterStyle">Letter style</label>
+          <select id="letterStyle">
+            <option value="heartfelt">Heartfelt & Warm</option>
+            <option value="poetic">Poetic & Lyrical</option>
+            <option value="gentle">Gentle & Soft</option>
+            <option value="raw">Raw & Honest</option>
+            <option value="formal">Formal & Composed</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="senderName">Your name (optional)</label>
+          <input type="text" id="senderName" placeholder="Sign the letter as..." />
+        </div>
+
+        <button class="generate-btn" id="generateBtn">
+          <span class="btn-text">Generate My Letter</span>
+          <span class="btn-icon">✉️</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Right: Emotion Intensity Panel -->
+    <aside class="emotion-panel">
+      <div class="panel-card">
+        <h2 class="panel-heading"><span class="panel-heading-icon">🎛️</span> Emotion Depth</h2>
+        <p class="panel-sub">Tune how much of each feeling goes into your letter</p>
+
+        <div class="slider-group" id="sliderGroup">
+          <div class="emotion-slider-item">
+            <div class="slider-label">
+              <span>💗 Warmth</span>
+              <span class="slider-val" id="val-warmth">60</span>
+            </div>
+            <input type="range" min="0" max="100" value="60" class="slider" id="slider-warmth" data-key="warmth" />
+          </div>
+
+          <div class="emotion-slider-item">
+            <div class="slider-label">
+              <span>🥺 Vulnerability</span>
+              <span class="slider-val" id="val-vulnerability">40</span>
+            </div>
+            <input type="range" min="0" max="100" value="40" class="slider" id="slider-vulnerability" data-key="vulnerability" />
+          </div>
+
+          <div class="emotion-slider-item">
+            <div class="slider-label">
+              <span>🌧️ Sadness</span>
+              <span class="slider-val" id="val-sadness">30</span>
+            </div>
+            <input type="range" min="0" max="100" value="30" class="slider" id="slider-sadness" data-key="sadness" />
+          </div>
+
+          <div class="emotion-slider-item">
+            <div class="slider-label">
+              <span>✨ Hope</span>
+              <span class="slider-val" id="val-hope">70</span>
+            </div>
+            <input type="range" min="0" max="100" value="70" class="slider" id="slider-hope" data-key="hope" />
+          </div>
+
+          <div class="emotion-slider-item">
+            <div class="slider-label">
+              <span>🔥 Intensity</span>
+              <span class="slider-val" id="val-intensity">50</span>
+            </div>
+            <input type="range" min="0" max="100" value="50" class="slider" id="slider-intensity" data-key="intensity" />
+          </div>
+
+          <div class="emotion-slider-item">
+            <div class="slider-label">
+              <span>🔥 Anger</span>
+              <span class="slider-val" id="val-anger">30</span>
+            </div>
+            <input type="range" min="0" max="100" value="30" class="slider" id="slider-anger" data-key="anger" />
+          </div>
+
+          <div class="emotion-slider-item">
+            <div class="slider-label">
+              <span>🕊️ Forgiveness</span>
+              <span class="slider-val" id="val-forgiveness">50</span>
+            </div>
+            <input type="range" min="0" max="100" value="50" class="slider" id="slider-forgiveness" data-key="forgiveness" />
+          </div>
+
+          <div class="emotion-slider-item">
+            <div class="slider-label">
+              <span>🌙 Nostalgia</span>
+              <span class="slider-val" id="val-nostalgia">40</span>
+            </div>
+            <input type="range" min="0" max="100" value="40" class="slider" id="slider-nostalgia" data-key="nostalgia" />
+          </div>
+        </div>
+
+        <div class="emotion-preview" id="emotionPreview">
+          <div class="aura-ring">
+            <div class="emotion-aura" id="emotionAura"></div>
+          </div>
+          <p class="aura-label" id="auraLabel">Balanced &amp; Open</p>
+        </div>
+
+        <button class="reset-btn" id="resetSliders">Reset to Balanced</button>
+      </div>
+    </aside>
+  </main>
+
+  <!-- Letter Output Section -->
+  <section class="letter-section" id="letterSection" aria-live="polite">
+    <div class="letter-bg" id="letterBg">
+      <p class="letter-section-title">Your letter is ready ✦</p>
+      <div class="envelope-wrapper" id="envelopeWrapper">
+        <!-- Envelope -->
+        <div class="envelope" id="envelope">
+          <div class="envelope-flap" id="envelopeFlap"></div>
+          <div class="envelope-body">
+            <div class="envelope-seal" id="envelopeSeal">✉</div>
+          </div>
+        </div>
+
+        <!-- Letter Paper -->
+        <div class="letter-paper" id="letterPaper">
+          <div class="letter-watermark" aria-hidden="true">✦</div>
+          <div class="letter-content" id="letterContent">
+            <div class="letter-date" id="letterDate"></div>
+            <div class="letter-greeting" id="letterGreeting"></div>
+            <div class="letter-body" id="letterBody"></div>
+            <div class="letter-closing" id="letterClosing"></div>
+            <div class="letter-signature" id="letterSignature"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="letter-actions" id="letterActions">
+        <button class="action-btn" id="copyBtn">📋 Copy Letter</button>
+        <button class="action-btn" id="downloadBtn">🖼️ Save as Image</button>
+        <button class="action-btn" id="newLetterBtn">✉️ Write Another</button>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <p>Made with <em class="footer-heart">♥</em> quiet care &nbsp;·&nbsp; Words for You</p>
+  </footer>
+
+  <!-- Download Loading Overlay -->
+  <div class="dl-overlay" id="dlOverlay" aria-hidden="true">
+    <div class="dl-overlay-inner">
+      <div class="dl-envelope-anim" id="dlEnvAnim">
+        <div class="dl-env-body">
+          <div class="dl-env-flap"></div>
+          <div class="dl-env-letter"></div>
+        </div>
+      </div>
+      <p class="dl-phrase" id="dlPhrase">may your words reach the right person</p>
+      <div class="dl-dots"><span></span><span></span><span></span></div>
+    </div>
+  </div>
+
+  <script src="letters.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
